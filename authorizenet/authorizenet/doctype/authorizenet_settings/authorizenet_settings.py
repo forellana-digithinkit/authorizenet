@@ -64,8 +64,14 @@ import authorize
 from authorize import AuthorizeResponseError, AuthorizeInvalidError
 from authorizenet.utils import get_authorizenet_user, get_card_accronym, authnet_address, get_contact
 
-from dti_devtools.debug import log, pretty_json
+#from dti_devtools.debug import log, pretty_json
 
+def log(*args, **kwargs):
+	print("\n".join(args))
+
+	return "--- DEPRECATED PRETTY_JSON ---"
+def pretty_json(*args, **kwargs):
+	pass
 
 class AuthorizeNetSettings(Document):
 	service_name = "AuthorizeNet"
@@ -138,13 +144,16 @@ class AuthorizeNetSettings(Document):
 		# TODO: Why must we save doctype first before setting docname?
 		request.reference_docname = kwargs["reference_docname"]
 		request.save()
+		frappe.db.commit()
 
 		return request
 
 	def get_payment_url(self, **kwargs):
 		request = self.build_authorizenet_request(**kwargs)
 		url = "./integrations/authorizenet_checkout/{0}"
-		return get_url(url.format(request.get("name" )))
+		result = get_url(url.format(request.get("name" )))
+		print("------ authnet payment url: {}".format(result))
+		return result
 
 	def get_settings(self):
 		settings = frappe._dict({
@@ -232,7 +241,7 @@ class AuthorizeNetSettings(Document):
 
 			# attempt to find valid email address
 			email = self.process_data.get("payer_email")
-			
+
 			if email:
 				email = email.split(',')[0]
 

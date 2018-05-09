@@ -59,6 +59,7 @@ def get_context(context):
 
 
     else:
+        print("-------- REDIRECTING... {}".format(request_name))
         frappe.redirect_to_message(_('Some information is missing'), _(
             'Looks like someone sent you to an incomplete URL. Please ask them to look into it.'))
         frappe.local.flags.redirect_location = frappe.local.response.location
