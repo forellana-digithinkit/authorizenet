@@ -17,13 +17,10 @@ frappe.integration_service.authorizenet_gateway =  frappe.integration_service.au
         $('#authorizenet-process-btn').fadeOut('fast');
         base.process_card(card_info, billing_info, stored_payment_options, reference_id,
           function(err, result) {
-						console.log(err, result);
-
             if ( err ) {
 							if ( display_errors && err.errors ) {
 								frappe.msgprint(err.errors.join("\n"));
 							}
-
               $('#authorizenet-error').text(err.error)
               $('#authorizenet-payment').fadeIn('fast');
               $('#authorizenet-process-btn').fadeIn('fast');
