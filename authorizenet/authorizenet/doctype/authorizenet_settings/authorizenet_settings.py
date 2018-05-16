@@ -147,7 +147,6 @@ class AuthorizeNetSettings(Document):
 		request = self.build_authorizenet_request(**kwargs)
 		url = "./integrations/authorizenet_checkout/{0}"
 		result = get_url(url.format(request.get("name" )))
-		print("------ authnet payment url: {}".format(result))
 		return result
 
 	def get_settings(self):
@@ -377,7 +376,7 @@ class AuthorizeNetSettings(Document):
 			request.log_action(frappe.get_traceback(), "Error")
 			request.status = "Error"
 			request.error_msg = "[UNEXPECTED ERROR]: {0}".format(ex)
-			raise ex
+			pass
 
 
 		# now check if we should store payment information on success
@@ -539,7 +538,7 @@ class AuthorizeNetSettings(Document):
 						status)
 					request.log_action("Custom Redirect To: %s" % custom_redirect_to, "Info")
 			except Exception as ex:
-				print(frappe.get_traceback())
+				log(frappe.get_traceback())
 				request.log_action(frappe.get_traceback(), "Error")
 				raise ex
 
@@ -560,6 +559,10 @@ class AuthorizeNetSettings(Document):
 
 		params = []
 		if redirect_to:
+			# Fixes issue where system passes a relative url for orders
+			if redirect_to == "orders":
+				redirect_to = "/orders"
+
 			params.append(urllib.urlencode({"redirect_to": redirect_to}))
 		if redirect_message:
 			params.append(urllib.urlencode({"redirect_message": redirect_message}))
