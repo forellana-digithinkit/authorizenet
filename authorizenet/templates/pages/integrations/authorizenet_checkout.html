@@ -8,7 +8,7 @@
 <script>
 	{% include "templates/includes/integrations/authorizenet/form.js" %}
 	var authorizenet_gateway = new frappe.integration_service.authorizenet_gateway();
-	authorizenet_gateway.form('{{request_name}}');
+	authorizenet_gateway.form('{{request_name}}', true);
 </script>
 {% endblock %}
 

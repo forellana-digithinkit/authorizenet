@@ -218,12 +218,7 @@ class AuthorizeNetSettings(Document):
 				for f in required_card_fields:
 					if not self.card_info.get(f):
 						request.status = "Error"
-						return {
-							request,
-							None,
-							"Missing field: %s" % f,
-							{}
-						}
+						return request,	None, "Missing field: %s" % f, {}
 
 			# prepare authorize api
 			authorize.Configuration.configure(
@@ -383,11 +378,14 @@ class AuthorizeNetSettings(Document):
 			pass
 
 		except Exception as ex:
+			print("------------------------------------")
+			import traceback
+			print(traceback.format_exc())
 			# any other errors
 			request.log_action(frappe.get_traceback(), "Error")
 			request.status = "Error"
 			request.error_msg = "[UNEXPECTED ERROR]: {0}".format(ex)
-			pass
+			raise ex
 
 
 		# now check if we should store payment information on success

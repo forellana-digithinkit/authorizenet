@@ -1,10 +1,3 @@
-#authorienet-sa-form {
-	position: absolute;
-	left: 50%;
-	top: 50%;
-	transform: translate(-50%, -50%);
-}
-
 .authorizenet-form .nopadding {
 	padding: 0;
 }
@@ -15,6 +8,10 @@
 
 .authorizenet-form .nopad-right {
 	padding-right: 0;
+}
+
+#authorizenet-sa-form .nopadding {
+	padding: 0 15px;
 }
 
 /* remove spacing between middle columns */
