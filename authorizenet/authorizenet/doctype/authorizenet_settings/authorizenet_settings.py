@@ -61,17 +61,12 @@ from datetime import datetime
 import urllib
 import authorize
 
+import traceback
 from authorize import AuthorizeResponseError, AuthorizeInvalidError
 from authorizenet.utils import get_authorizenet_user, get_card_accronym, authnet_address, get_contact
 
-#from dti_devtools.debug import log, pretty_json
-
 def log(*args, **kwargs):
 	print("\n".join(args))
-
-	return "--- DEPRECATED PRETTY_JSON ---"
-def pretty_json(*args, **kwargs):
-	pass
 
 class AuthorizeNetSettings(Document):
 	service_name = "AuthorizeNet"
@@ -249,7 +244,6 @@ class AuthorizeNetSettings(Document):
 
 						if "@" not in email:
 							log("AUTHNET FAILURE! Bad email: {0}".format(email))
-							log(pretty_json(self.process_data))
 							raise ValueError("There are no valid emails associated with this customer")
 
 			# build transaction data
@@ -378,9 +372,7 @@ class AuthorizeNetSettings(Document):
 			pass
 
 		except Exception as ex:
-			print("------------------------------------")
-			import traceback
-			print(traceback.format_exc())
+			log(frappe.get_traceback())
 			# any other errors
 			request.log_action(frappe.get_traceback(), "Error")
 			request.status = "Error"
